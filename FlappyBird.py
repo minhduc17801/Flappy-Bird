@@ -45,7 +45,7 @@ def score_display(game_state):
     score_rect = score_surface.get_rect(center = (216, 100))
     screen.blit(score_surface, score_rect)
     high_score_surface = game_font.render(f'High Score: {int(high_score)}',True, (255, 255, 255))
-    high_score_rect = high_score_surface.get_rect(center = (216, 630))
+    high_score_rect = high_score_surface.get_rect(center = (216, 620))
     screen.blit(high_score_surface, high_score_rect)
 def update_score(score, high_score):
   if score > high_score:
@@ -63,6 +63,7 @@ def incscore(pipes, score):
   for pipe in pipes:
     if pipe.top < 0 and pipe.right > 64:
       if pipe.right  < bird_rect.left: 
+        point_sound.play()
         score+=1
   return score
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
@@ -166,9 +167,9 @@ while True:
       draw_pipe(pipe_list)
       # score += 0.01
       score = incscore(pipe_list, score)
-      if score > sound_check:
-        point_sound.play()
-        sound_check +=1
+      # if score > sound_check:
+      #   point_sound.play()
+      #   sound_check +=1
       for pipe in pipe_list:
         if pipe.right<0:
           del pipe_list[0]
