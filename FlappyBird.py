@@ -54,12 +54,17 @@ def update_score(score, high_score):
       pickle.dump(high_score, file)
   return high_score
 def incscore(pipes, score):
-  dem=[]
+  # dem=[]
+  # for pipe in pipes:
+  #   if bird_rect.left > pipe.right:
+  #     dem.append(pipe)
+  # score = len(dem)
+  # return score/2 
   for pipe in pipes:
-    if bird_rect.left > pipe.right:
-      dem.append(pipe)
-  score = len(dem)
-  return score/2
+    if pipe.top < 0 and pipe.right > 64:
+      if pipe.right  < bird_rect.left: 
+        score+=1
+  return score
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
 pygame.init()
 # Path maker pyinstaller
@@ -164,6 +169,9 @@ while True:
       if score > sound_check:
         point_sound.play()
         sound_check +=1
+      for pipe in pipe_list:
+        if pipe.right<0:
+          del pipe_list[0]
       score_display('main game')
     else:
       screen.blit(game_over_surface, game_over_rect)
