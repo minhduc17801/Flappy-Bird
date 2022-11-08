@@ -1,4 +1,4 @@
-import pygame, sys, random
+import pygame, sys, random, pickle
 # Hàm
 def draw_floor():
   screen.blit(floor,(floor_x_pos,650))
@@ -50,6 +50,8 @@ def score_display(game_state):
 def update_score(score, high_score):
   if score > high_score:
     high_score = score
+    with open('highscore.dat', 'wb') as file:
+      pickle.dump(high_score, file)
   return high_score
 def incscore(pipes, score):
   dem=[]
@@ -84,6 +86,11 @@ game_active = True
 game_start = True
 score = 0
 high_score = 0
+try:
+  with open('highscore.dat', 'rb') as file:
+    high_score = pickle.load(file)
+except:
+  high_score = 0
 bg = pygame.image.load(path + "assets/background-night.png").convert()
 bg = pygame.transform.scale2x(bg)
 floor = pygame.image.load(path + "assets/floor.png").convert()
