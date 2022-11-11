@@ -54,12 +54,6 @@ def update_score(score, high_score):
       pickle.dump(high_score, file)
   return high_score
 def incscore(pipes, score):
-  # dem=[]
-  # for pipe in pipes:
-  #   if bird_rect.left > pipe.right:
-  #     dem.append(pipe)
-  # score = len(dem)
-  # return score/2 
   for pipe in pipes:
     if pipe.top < 0 and pipe.right > 64:
       if pipe.right  < bird_rect.left: 
@@ -92,16 +86,20 @@ game_active = True
 game_start = True
 score = 0
 high_score = 0
+
 try:
   with open('highscore.dat', 'rb') as file:
     high_score = pickle.load(file)
 except:
   high_score = 0
+
 bg = pygame.image.load(path + "assets/background-night.png").convert()
 bg = pygame.transform.scale2x(bg)
+
 floor = pygame.image.load(path + "assets/floor.png").convert()
 floor = pygame.transform.scale2x(floor)
 floor_x_pos = 0
+
 bird_down = pygame.transform.scale2x(pygame.image.load(path + 'assets/yellowbird-downflap.png').convert_alpha())
 bird_mid = pygame.transform.scale2x(pygame.image.load(path + 'assets/yellowbird-midflap.png').convert_alpha())
 bird_up = pygame.transform.scale2x(pygame.image.load(path + 'assets/yellowbird-upflap.png').convert_alpha())
@@ -110,23 +108,25 @@ bird_index = 0
 bird = bird_list[bird_index]
 birdflap = pygame.USEREVENT + 1
 pygame.time.set_timer(birdflap, 200)
-# bird = pygame.image.load("assets/yellowbird-midflap.png").convert_alpha()
-# bird = pygame.transform.scale2x(bird)
 bird_rect = bird.get_rect(center = (100,384))
+
 pipe_surface = pygame.image.load(path + "assets/pipe-green.png").convert()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 spawnpipe = pygame.USEREVENT
 pygame.time.set_timer(spawnpipe, 1200)
+
 game_over_surface = pygame.transform.scale2x(pygame.image.load(path + 'assets/gameover.png').convert_alpha())
 game_over_rect = game_over_surface.get_rect(center = ( 216, 384))
+
 game_start_surface = pygame.transform.scale2x(pygame.image.load(path + 'assets/message.png').convert_alpha())
 game_start_rect = game_start_surface.get_rect(center = ( 216, 384))
+# Sound
 flap_sound = pygame.mixer.Sound(path + 'sound/sfx_wing.wav')
 hit_sound = pygame.mixer.Sound(path + 'sound/sfx_hit.wav')
 point_sound = pygame.mixer.Sound(path + 'sound/sfx_point.wav')
-
-while True:
+running = True
+while running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       pygame.quit()
@@ -165,11 +165,7 @@ while True:
       screen.blit(rotated_bird,bird_rect)
       pipe_list = move_pipe(pipe_list)
       draw_pipe(pipe_list)
-      # score += 0.01
       score = incscore(pipe_list, score)
-      # if score > sound_check:
-      #   point_sound.play()
-      #   sound_check +=1
       for pipe in pipe_list:
         if pipe.right<0:
           del pipe_list[0]
